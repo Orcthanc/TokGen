@@ -1,12 +1,12 @@
 #include "Lexer.hpp"
 
 #include <iostream>
+#include <iomanip>
 #include <ctype.h>
 
-using namespace LEXER_HPP_NAMESPACE;
 using namespace std;
 
-token_id ::LEXER_HPP_NAMESPACE::Lexer::push_rule( const std::string& name, const std::string& rule ){
+LEXER_HPP_NAMESPACE::token_id LEXER_HPP_NAMESPACE::Lexer::push_rule( const std::string& name, const std::string& rule ){
 	auto temp = name_to_tok.emplace( name, ++curr_id );
 	tok_to_name.emplace( curr_id, temp.first->first );
 
@@ -15,14 +15,14 @@ token_id ::LEXER_HPP_NAMESPACE::Lexer::push_rule( const std::string& name, const
 	return curr_id;
 }
 
-void ::LEXER_HPP_NAMESPACE::Lexer::start( const char* input ){
+void LEXER_HPP_NAMESPACE::Lexer::start( const char* input ){
 	this->input = input;
 	line = 1;
 	column = 0;
 	pos = 0;
 }
 
-::LEXER_HPP_NAMESPACE::Lexer& ::LEXER_HPP_NAMESPACE::Lexer::operator>>( Token& t ){
+LEXER_HPP_NAMESPACE::Lexer& LEXER_HPP_NAMESPACE::Lexer::operator>>( Token& t ){
 
 	t.line = line;
 	t.column = column;
@@ -69,7 +69,7 @@ void ::LEXER_HPP_NAMESPACE::Lexer::start( const char* input ){
 	return *this;
 }
 
-void ::LEXER_HPP_NAMESPACE::Lexer::debug_dump( std::ostream& o ){
+void LEXER_HPP_NAMESPACE::Lexer::debug_dump( std::ostream& o ){
 	for( auto& [au, token_id]: automata ){
 		o << token_id << ":" << endl;
 		au.debug_dump( o );
@@ -77,7 +77,7 @@ void ::LEXER_HPP_NAMESPACE::Lexer::debug_dump( std::ostream& o ){
 	}
 }
 
-const std::unordered_map<std::string, token_id>& ::LEXER_HPP_NAMESPACE::Lexer::get_tokens(){
+const std::unordered_map<std::string, LEXER_HPP_NAMESPACE::token_id>& LEXER_HPP_NAMESPACE::Lexer::get_tokens(){
 	return name_to_tok;
 }
 
@@ -263,13 +263,13 @@ void ::LEXER_HPP_NAMESPACE::Automata::debug_dump( std::ostream& o ){
 	}
 }
 
-uint32_t ::LEXER_HPP_NAMESPACE::Automata::longest_match(){
+uint32_t LEXER_HPP_NAMESPACE::Automata::longest_match(){
 	return longest;
 }
 
 
 std::ostream& ::LEXER_HPP_NAMESPACE::operator<<( std::ostream& o, const Token& t ){
-	o << "(" << t.id << ";" << t.match_text << ";" << t.line << ";" << t.column << ")" << std::endl;
+	o << "(" << t.id << ";" << std::quoted( t.match_text ) << ";" << t.line << ";" << t.column << ")";
 
 	return o;
 }
