@@ -82,6 +82,9 @@ const std::unordered_map<std::string, LEXER_HPP_NAMESPACE::token_id>& LEXER_HPP_
 }
 
 
+static int any_char( int c ){
+	return c;
+}
 
 ::LEXER_HPP_NAMESPACE::Automata::Automata( const std::string& rule ){
 	State state_max = 0;
@@ -131,6 +134,7 @@ const std::unordered_map<std::string, LEXER_HPP_NAMESPACE::token_id>& LEXER_HPP_
 					case '?':
 					case '*':
 					case '+':
+					case '.':
 					{
 						if( last_was_opt ){
 							c_transitions.emplace( std::make_pair( state_max - 1, *it ), state_max + 1 );
@@ -167,6 +171,17 @@ const std::unordered_map<std::string, LEXER_HPP_NAMESPACE::token_id>& LEXER_HPP_
 				} else {
 					f_transitions[state_max].emplace_back( last_f, state_max );
 				}
+			} break;
+			case '.':
+			{
+				if( last_was_opt ){
+					f_transitions[state_max - 1].emplace_back( ::any_char, state_max + 1 );
+				}
+				f_transitions[state_max].emplace_back( ::any_char, state_max + 1 );
+				last_f = ::any_char;
+				last_was_c = false;
+				last_was_opt = false;
+				++state_max;
 			} break;
 			default:
 			{

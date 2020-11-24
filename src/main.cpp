@@ -15,7 +15,7 @@ int main( int argc, char** argv ){
 	lex.push_rule( "Times", "\\*" );
 	lex.push_rule( "Divide", "/" );
 	lex.push_rule( "Modulo", "%" );
-	lex.push_rule( "Float", "\\d*.\\d+" );
+	lex.push_rule( "Float", "\\d*\\.\\d+" );
 	lex.push_rule( "Int", "\\d" );
 	lex.push_rule( "Assignment", "=" );
 	lex.push_rule( "CurlyBracketOpen", "{" );
@@ -25,12 +25,13 @@ int main( int argc, char** argv ){
 	lex.push_rule( "BracketOpen", "[" );
 	lex.push_rule( "BracketClose", "]" );
 	lex.push_rule( "Comma", "," );
-	lex.push_rule( "Dot", "." );
+	lex.push_rule( "Dot", "\\." );
 	lex.push_rule( "WhiteSpace", "\\s" );
+	lex.push_rule( "String", "\".*\"" );
 
 	lex.debug_dump( std::cout );
 
-	lex.start( "123.3e1.2etesttet" );
+	lex.start( "123.3e1.2etesttet\"aa/asdf.ponfgjdh.asdf\"" );
 
 	Token t;
 
